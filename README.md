@@ -1,12 +1,8 @@
 # Introduction
-Vessel is an opinionated bootstrap of files to setup an API centric Flask application.
-
-Its aims to provide a simple set of files and configuration required for building API services using Flask.
-Vessel is strongly opinionated about how control flows across your application, but its also very extensible.
-You can install any python packages you want and/or remove the ones you do not want.
+This repo is for the Vanhack Class Management System API Backend
 
 ## Setup
-To use Vessel, clone this repo into `project_root`, ensure your python environments are configured and activated. 
+To run this project clone this repo into `project_root`, ensure your python environments are configured and activated. 
 
 Run: `$ pip install -r requirements.txt`
 
@@ -21,8 +17,8 @@ Run: `$ python run.py runserver`
 
 Open your browser and enter `http://127.0.0.1:5000/api/v1/`
 
-## vessel CLI Tool
-Vessel comes with a small CLI tool to help generate commmonly used utilities like `models`, `repositories`, `blueprints`,
+## App CLI Tool
+App comes with a small CLI tool to help generate commonly used utilities like `models`, `repositories`, `blueprints`,
  `controllers`, `tests` and `factories`
  
  Example:
@@ -38,6 +34,14 @@ Vessel comes with a small CLI tool to help generate commmonly used utilities lik
 	make:factory name eg python vessel.py make:factory role
     show_routes eg python vessel.py show_routes
  ```
+
+To Setup DB and Run Migrations:
+```
+- $ python run.py db init
+- $ python run.py db migrate
+- $ python run.py db upgrade
+```
+
 
 ## Tests
 Ofcourse there's support for testing using pytest. To create a new test suite, simply run the make:test command on the CLI. 
@@ -99,4 +103,4 @@ For Heroku enthusiast. Delete if you'd not be deploying to Heroku.
 
 ## Bugs, Corrections, Feedback, Contributing
 No system is 100% I'd be happy if you can jump in and collaborate. If you find bugs or errors or see places where you can improve on,
-fork the repo, and raise a PR or shoot me an email. jcobhams[at]gmail[dot]com
+fork the repo, and raise a PR or shoot me an email. jattoade[at]gmail[dot]com

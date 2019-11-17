@@ -10,4 +10,6 @@ home_controller = HomeController(request)
 def homepage():
 	return home_controller.home_page()
 
-	
+@home_blueprint.route('/status', methods=['GET', 'POST', 'PUT', 'PATCH'])
+def api_status():
+	return home_controller.api_status()
