@@ -5,6 +5,14 @@ class BaseRepo:
 	
 	def __init__(self, _model):
 		self._model = _model
+
+	def bulk_insert(self, mappings):
+		try:
+			db.session.bulk_insert_mappings(self._model, mappings)
+			db.session.commit()
+		except Exception as e:
+			print(e)
+			db.session.rollback()
 		
 	def fetch_all(self):
 		"""Return all the data in the model."""

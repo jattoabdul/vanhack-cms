@@ -5,8 +5,8 @@ class Event(BaseModel):
 	__tablename__ = 'events'
 	
 	name = db.Column(db.String(255), nullable=False, unique=True)
-	reference = db.Column(db.String(100), nullable=False, unique=True)
 	desc = db.Column(db.Text(), nullable=True)
+	status = db.Column(db.Boolean(), nullable=True, default=True)
 
 	student_event = db.relationship('StudentEvent')
-	lectures = db.relationship('OrderLineItem', lazy=False)
+	lectures = db.relationship('Lecture', lazy=False)

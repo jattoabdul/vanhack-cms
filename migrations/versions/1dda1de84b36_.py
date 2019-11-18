@@ -39,11 +39,10 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('reference', sa.String(length=100), nullable=False),
     sa.Column('desc', sa.Text(), nullable=True),
+    sa.Column('status', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name'),
-    sa.UniqueConstraint('reference')
+    sa.UniqueConstraint('name')
     )
     op.create_table('lectures',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -52,14 +51,11 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('event_id', sa.Integer(), nullable=True),
     sa.Column('topic', sa.String(length=255), nullable=False),
-    sa.Column('reference', sa.String(length=100), nullable=False),
     sa.Column('desc', sa.Text(), nullable=True),
     sa.Column('zoom_link', sa.String(length=255), nullable=True),
     sa.Column('datetime', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
-    sa.UniqueConstraint('reference'),
-    sa.UniqueConstraint('topic')
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], )
     )
     op.create_table('students',
     sa.Column('id', sa.Integer(), nullable=False),
