@@ -2,7 +2,7 @@
 This repo is for the Vanhack Class Management System API Backend
 
 ## HOSTED API URL
-The API is hosted on Heroku and can be accessed [here]()
+The API is hosted on Heroku and can be accessed [here](https://vanhack-cms-api.herokuapp.com/api/v1/)
 
 ## HOSTED API DOCUMENTATION
 Access the live API doc [here](https://documenter.getpostman.com/view/1203729/SW7Z38Bf?version=latest)
