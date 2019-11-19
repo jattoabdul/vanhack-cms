@@ -12,4 +12,4 @@ class Admin(BaseModel):
 	status = db.Column(db.Boolean(), nullable=True, default=True)
 	auth_key = db.Column(db.String(255), nullable=True)
 
-	lecture_admin = db.relationship('LectureAdmin')
+	lecture_admins = db.relationship('LectureAdmin')

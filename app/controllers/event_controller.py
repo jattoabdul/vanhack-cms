@@ -43,12 +43,12 @@ class EventController(BaseController):
 			student = self.student_repo.find_first(id=student_id, is_deleted=False, is_premium=True)
 			if not student:
 				return self.handle_response('No Student Found Or Permission Denied')
-			if self.student_event_repo.filter_and_count(event_id=event_id, user_id=student_id) <= 0:
+			if self.student_event_repo.filter_and_count(event_id=event_id, student_id=student_id) <= 0:
 				return self.handle_response('No Event Found For This Student')
 
 		event = self.event_repo.find_first(id=event_id, is_deleted=False)
 		if event:
-			return self.handle_response('OK', payload={'faq': event.serialize()})
+			return self.handle_response('OK', payload={'event': event.serialize()})
 		return self.handle_response('Invalid or Missing Event Id')
 
 	""" ADMIN ONLY ACTIONS """
@@ -96,18 +96,16 @@ class EventController(BaseController):
 		student = self.student_repo.find_first(id=student_id, is_deleted=False, is_premium=True)
 		if not student:
 			return self.handle_response('No Student Found Or Permission Denied')
-		# filters = {'is_deleted': False, 'student_id': student_id}
-		# student_events = self.student_event_repo.filter_by(**filters)
 		student_events = self.student_event_repo.get_unpaginated(student_id=student_id)
-		event_list_ids = [student_event.event_id for student_event in student_events.items]
+		event_list_ids = [student_event.event_id for student_event in student_events]
 		events = self.event_repo.fetch_events(event_list_ids)
-		event_list = [event.serialize() for event in events.items]
-		return self.handle_response('OK', payload={'events': event_list, 'meta': self.event_repo.pagination_meta(events)})
+		event_list = [event.serialize() for event in events]
+		return self.handle_response('OK', payload={'events': event_list})
 
 	# student subscribe to event
 	def subscribe_to_event(self, event_id):
 		student_id = self.user('id')
-		student = self.student_repo.find_first(id=student_id, is_deleted=False, is_premium=True)
+		student = self.student_repo.find_first(id=student_id, is_deleted=False, is_premium=True, is_verified=True)
 		if not student:
 			return self.handle_response('No Student Found Or Permission Denied')
 		event = self.event_repo.find_first(id=event_id, is_deleted=False)

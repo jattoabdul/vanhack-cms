@@ -1,7 +1,13 @@
 # Introduction
 This repo is for the Vanhack Class Management System API Backend
 
-## Setup
+## HOSTED API URL
+The API is hosted on Heroku and can be accessed [here]()
+
+## HOSTED API DOCUMENTATION
+Access the live API doc [here](https://documenter.getpostman.com/view/1203729/SW7Z38Bf?version=latest)
+
+## Local Setup
 To run this project clone this repo into `project_root`, ensure your python environments are configured and activated. 
 
 Run: `$ pip install -r requirements.txt`
@@ -18,7 +24,7 @@ Run: `$ python run.py runserver`
 Open your browser and enter `http://127.0.0.1:5000/api/v1/`
 
 ## App CLI Tool
-App comes with a small CLI tool to help generate commonly used utilities like `models`, `repositories`, `blueprints`,
+This App was bootsrapped using [Vessel](https://github.com/jcobhams/vessel) and it comes with a small CLI tool to help generate commonly used utilities like `models`, `repositories`, `blueprints`,
  `controllers`, `tests` and `factories`
  
  Example:
@@ -49,6 +55,8 @@ Ofcourse there's support for testing using pytest. To create a new test suite, s
 eg. `$ python vessel.py make:test integration/endpoints/test_user_endpoints`
 
 To run tests `$ python -m pytest`
+
+NB: No test written for this project yet.
 
 ## Folder and Code Structure
 ```
@@ -98,8 +106,6 @@ To run tests `$ python -m pytest`
     |-- run.py
     |-- vessel.py
 ```
-## Procfile
-For Heroku enthusiast. Delete if you'd not be deploying to Heroku.
 
 ## Bugs, Corrections, Feedback, Contributing
 No system is 100% I'd be happy if you can jump in and collaborate. If you find bugs or errors or see places where you can improve on,

@@ -83,10 +83,9 @@ class AccountController(BaseController):
 			if len(updates) == 0:
 				return self.handle_response('No Changes Made - No Parameters To Update', status_code=403)
 
+			student = self.student_repo.update(student, **updates)
 			student_object = {**student.serialize(excluded=['password'])}
 			expires = timedelta(days=30)
-
-			student = self.student_repo.update(student, **updates)
 			refresh_token = create_access_token(identity=student_object, expires_delta=expires)
 			return self.handle_response('OK', payload={'user': AccountController.user_object(student), 'refreshToken': refresh_token})
 
@@ -106,7 +105,7 @@ class AccountController(BaseController):
 			if last_name:
 				updates['last_name'] = last_name
 
-			if is_lecturer and type(is_lecturer) == bool:
+			if type(is_lecturer) == bool:
 				updates['is_lecturer'] = is_lecturer
 
 			if email and admin.email != email:
@@ -117,10 +116,9 @@ class AccountController(BaseController):
 			if len(updates) == 0:
 				return self.handle_response('No Changes Made - No Parameters To Update', status_code=403)
 
+			admin = self.admin_repo.update(admin, **updates)
 			admin_object = {**admin.serialize(excluded=['password'])}
 			expires = timedelta(days=30)
-
-			admin = self.student_repo.update(admin, **updates)
 			refresh_token = create_access_token(identity=admin_object, expires_delta=expires)
 			return self.handle_response('OK', payload={'user': AccountController.user_object(admin), 'refreshToken': refresh_token})
 
@@ -167,6 +165,11 @@ class AccountController(BaseController):
 
 		student = self.student_repo.find_first(id=student_id, is_deleted=False)
 
+		if confirm and student.is_premium:
+			return self.handle_response('Student Already Premium User')
+		if not confirm and not student.is_premium:
+			return self.handle_response('Student Not A Premium User')
+
 		if student:
 			student = self.student_repo.update(student, **{'is_premium': confirm})
 			return self.handle_response('OK', payload={'account': AccountController.user_object(student)})
@@ -189,17 +192,20 @@ class AccountController(BaseController):
 				users = self.student_repo.filter_by(is_deleted=False)
 		elif account_type == 'admin':
 			if len(filter_by) > 0:
-				users = self.student_repo.filter_by(is_deleted=False, **filter_by)
+				users = self.admin_repo.filter_by(is_deleted=False, **filter_by)
 			else:
-				users = self.student_repo.filter_by(is_deleted=False)
+				users = self.admin_repo.filter_by(is_deleted=False)
 		else:
 			return self.handle_response('Invalid Account Type Passed', status_code=400)
 
 		users_list = [AccountController.user_object(user) for user in users.items]
 
-		return self.handle_response('OK', payload={'accounts': users_list, 'meta': self.user_repo.pagination_meta(users)})
+		if account_type == 'student':
+			meta_items = self.student_repo.pagination_meta(users)
+		elif account_type == 'admin':
+			meta_items = self.admin_repo.pagination_meta(users)
 
-	pass
+		return self.handle_response('OK', payload={'accounts': users_list, 'meta': meta_items})
 
 	@staticmethod
 	def user_object(user, with_timestamp=False):

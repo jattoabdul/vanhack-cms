@@ -18,10 +18,12 @@ class Auth:
     """ Routes The Authentication Header Should Not Be Applied To """
     authentication_header_ignore = [
         '/auth/login',
-        '/auth/logout',
-        '/accounts/signup/',
-        '/password/reset/',
+        '/auth/admin/login',
+        '/accounts/student/signup',
+        '/accounts/admin/signup',
         '/docs',
+        '/status',
+        '/',
         'loaderio-038d65e72fe3012184259133474caec4.txt'
     ]
 
@@ -127,3 +129,44 @@ class Auth:
         if not location.isdigit():
             raise Exception('Location Header Value is Invalid')
         return int(location)
+
+    @staticmethod
+    def has_permission(user_type):
+
+        def permission_checker(f):
+
+            @wraps(f)
+            def decorated(*args, **kwargs):
+                admin_repo = AdminRepo()
+                student_repo = StudentRepo()
+
+                user_id = Auth.user('id')
+                user_email = Auth.user('email')
+                if user_type == 'admin':
+                    user = admin_repo.find_first(**{'id': user_id, 'email': user_email})
+
+                    if not user_id:
+                        return make_response(jsonify({'msg': 'Missing User ID in token'})), 400
+
+                    if not user:
+                        return make_response(jsonify({'msg': f'Access Error - {user_type.capitalize()} User Not Found'})), 400
+
+                    if 'isPremium' in user.serialize():
+                        return make_response(jsonify({'msg': f'Access Error - Permission Denied For Non-{user_type.capitalize()} Users'})), 400
+                elif user_type == 'student':
+                    user = student_repo.find_first(**{'id': user_id, 'email': user_email})
+
+                    if not user_id:
+                        return make_response(jsonify({'msg': 'Missing User ID in token'})), 400
+
+                    if not user:
+                        return make_response(jsonify({'msg': f'Access Error - {user_type.capitalize()} User Not Found'})), 400
+
+                    if 'isLecturer' in user.serialize():
+                        return make_response(jsonify({'msg': f'Access Error - Permission Denied For Non-{user_type.capitalize()} Users'})), 400
+
+                return f(*args, **kwargs)
+
+            return decorated
+
+        return permission_checker

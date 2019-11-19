@@ -9,56 +9,57 @@ event_controller = EventController(request)
 """ Admin BluePrints """
 
 
-# admin create event
 @event_blueprint.route('/admin/events', methods=['POST'])
 @Security.validator(['name|required'])
+@Auth.has_permission('admin')
 def create_event():
 	return event_controller.create_event()
 
 
-# admin update event
 @event_blueprint.route('/admin/events/<int:event_id>', methods=['PUT', 'PATCH'])
+@Auth.has_permission('admin')
 def update_event(event_id):
 	return event_controller.update_event(event_id)
 
 
-# admin fetch all events
 @event_blueprint.route('/admin/events', methods=['GET'])
+@Auth.has_permission('admin')
 def admin_fetch_events():
 	return event_controller.fetch_events(student=False)
 
 
-# admin fetch single event
 @event_blueprint.route('/admin/events/<int:event_id>', methods=['GET'])
+@Auth.has_permission('admin')
 def admin_fetch_event(event_id):
 	return event_controller.fetch_single_event(event_id, student=False)
 
 
 """ Student BluePrints """
-# student fetch single event
 @event_blueprint.route('/student/events/<int:event_id>', methods=['GET'])
+@Auth.has_permission('student')
 def student_fetch_event(event_id):
 	return event_controller.fetch_single_event(event_id, student=True)
 
 
-# student fetch all events (if student.is_premium and event.status is true)
 @event_blueprint.route('/events', methods=['GET'])
+@Auth.has_permission('student')
 def student_fetch_events():
 	return event_controller.fetch_events(student=True)
 
 
-# student fetch all events which he/she has subscribed to (if student.is_premium)
 @event_blueprint.route('/student/events/personal', methods=['GET'])
+@Auth.has_permission('student')
 def student_fetch_personal_events():
 	return event_controller.fetch_my_events()
 
 
-# student subscribe to event
 @event_blueprint.route('/student/events/<int:event_id>/subscribe', methods=['POST'])
+@Auth.has_permission('student')
 def student_subscribe_to_event(event_id):
 	return event_controller.subscribe_to_event(event_id)
 
-# student unsubscribe from event
+
 @event_blueprint.route('/student/events/<int:event_id>/unsubscribe', methods=['POST'])
+@Auth.has_permission('student')
 def student_unsubscribe_to_event(event_id):
 	return event_controller.unsubscribe_from_event(event_id)
