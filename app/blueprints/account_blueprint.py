@@ -52,6 +52,12 @@ def student_unconfirm_premium_account():
 """ Admin BluePrints """
 
 
+@account_blueprint.route('/admin/me', methods=['GET'])
+@Auth.has_permission('admin')
+def admin_me():
+    return account_controller.fetch_my_admin_account()
+
+
 @account_blueprint.route('/students', methods=['GET'])
 @Auth.has_permission('admin')
 def list_student_accounts():
