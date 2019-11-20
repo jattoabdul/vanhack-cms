@@ -136,7 +136,7 @@ class AccountController(BaseController):
 
 	def fetch_my_admin_account(self):
 		user_id = self.user('id')
-		user = self.student_repo.find_first(id=user_id, is_deleted=False)
+		user = self.admin_repo.find_first(id=user_id, is_deleted=False)
 		if user:
 			return self.handle_response('OK', payload={'account': AccountController.user_object(user)})
 		return self.handle_response('Invalid ID Passed or Permission Denied', status_code=400)
