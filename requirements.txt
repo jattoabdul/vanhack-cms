@@ -25,7 +25,7 @@ gunicorn==19.8.1
 idna==2.8
 inflect==1.0.1
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 kombu==4.3.0
 mailchimp3==3.0.7
 Mako==1.0.7
