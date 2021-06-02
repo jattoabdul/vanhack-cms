@@ -53,6 +53,6 @@ stripe==2.21.0
 termcolor==1.1.0
 text-unidecode==1.2
 twilio==6.25.0
-urllib3==1.24.1
+urllib3==1.26.5
 vine==1.2.0
 Werkzeug==0.14.1
